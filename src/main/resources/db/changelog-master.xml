@@ -26,4 +26,7 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
   <include file="db/changelog/20120810-table-shedlock.xml"/>
   <include file="db/changelog/20120820-table-persistent_events.xml"/>
   <include file="db/changelog/20120830-index-persistent_events.xml"/>
+  <include file="db/changelog/21030610-table-contracts.xml"/>
+  <include file="db/changelog/21030620-table-pricing_plans.xml"/>
+  <include file="db/changelog/21030630-table-pricing_plan_elements.xml"/>
 </databaseChangeLog>

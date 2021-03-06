@@ -1,0 +1,33 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+    http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd ">
+
+  <changeSet id="21030610" author="appkr">
+    <comment>create contracts table</comment>
+
+    <createTable tableName="contracts" remarks="">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="PK_CONTRACT_ID"/>
+      </column>
+      <column name="external_id" type="varchar(40)" remarks="">
+        <constraints nullable="false"/>
+      </column>
+      <column name="status" type="varchar(40)" remarks="">
+        <constraints nullable="false"/>
+      </column>
+      <column name="valid_from" type="timestamp" remarks="">
+        <constraints nullable="false"/>
+      </column>
+      <column name="valid_to" type="timestamp" remarks=""/>
+    </createTable>
+
+    <rollback>
+      <dropTable tableName="contracts"/>
+    </rollback>
+  </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,38 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+    http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd ">
+
+  <changeSet id="21030610" author="appkr">
+    <comment>create pricing_plan_elements table</comment>
+
+    <createTable tableName="pricing_plan_elements" remarks="">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" primaryKeyName="PK_PRICING_PLAN_ELEMENT_ID"/>
+      </column>
+      <column name="pricing_plan_id" type="bigint" remarks="">
+        <constraints nullable="false"/>
+      </column>
+      <column name="distance_from" type="decimal(10, 1)" remarks="">
+        <constraints nullable="false"/>
+      </column>
+      <column name="distance_to" type="decimal(10, 1)" remarks="">
+        <constraints nullable="false"/>
+      </column>
+      <column name="step" type="decimal(10, 1)" remarks="">
+        <constraints nullable="false"/>
+      </column>
+      <column name="price_per_step" type="decimal(10, 2)" remarks="">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <rollback>
+      <dropTable tableName="pricing_plan_elements"/>
+    </rollback>
+  </changeSet>
+</databaseChangeLog>
