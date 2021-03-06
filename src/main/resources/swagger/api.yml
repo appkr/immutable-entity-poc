@@ -58,6 +58,53 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
+  /api/contracts:
+    post:
+      description: 계약 등록
+      operationId: createContract
+      tags:
+        - Contract
+      requestBody:
+        content:
+          application/vnd.appkr.private.v1+json:
+            schema:
+              $ref: '#/components/schemas/Contract'
+      responses:
+        '201':
+          $ref: '#/components/responses/Created'
+
+  /api/contracts/{contractId}:
+    parameters:
+      - $ref: '#/components/parameters/ContractIdParam'
+
+    get:
+      description: 계약 조회
+      operationId: getContract
+      tags:
+        - Contract
+
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/vnd.appkr.private.v1+json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+
+    put:
+      description: 계약 변경
+      operationId: updateContract
+      tags:
+        - Contract
+      requestBody:
+        content:
+          application/vnd.appkr.private.v1+json:
+            schema:
+              $ref: '#/components/schemas/Contract'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
 components:
   schemas:
 
@@ -180,6 +227,82 @@ components:
         page:
           $ref: '#/components/schemas/Page'
 
+    Contract:
+      type: object
+      properties:
+        contractId:
+          $ref: '#/components/schemas/UUID'
+        status:
+          $ref: '#/components/schemas/ContractStatus'
+        validThrough:
+          $ref: '#/components/schemas/EndlessDateRange'
+        pricingPlan:
+          $ref: '#/components/schemas/PricingPlan'
+
+    PricingPlan:
+      type: object
+      properties:
+        pricingPlanId:
+          $ref: '#/components/schemas/UUID'
+        contractId:
+          $ref: '#/components/schemas/UUID'
+        bin:
+          type: array
+          items:
+            $ref: '#/components/schemas/DistanceRangePricingElement'
+
+    EndlessDateRange:
+      type: object
+      properties:
+        from:
+          $ref: '#/components/schemas/DateTime'
+        to:
+          type: string
+          format: date-time
+          nullable: true
+          example: '2099-12-31T23:59:59+09:00'
+
+    ContractStatus:
+      description: |
+        - DRAFT: 임시저장
+        - EFFECTIVE: 적용중
+        - TERMINATED: 종료/해지
+      type: string
+      enum:
+        - DRAFT
+        - PENDING_APPROVAL
+        - APPROVED
+        - EFFECTIVE
+        - TERMINATED
+      example: DRAFT
+
+    DistanceRangePricingElement:
+      type: object
+      properties:
+        from:
+          $ref: '#/components/schemas/Distance'
+        to:
+          $ref: '#/components/schemas/Distance'
+        step:
+          $ref: '#/components/schemas/Distance'
+        pricePerStep:
+          $ref: '#/components/schemas/Money'
+
+    Distance:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/DecimalNumber'
+
+    DecimalNumber:
+      type: string
+      example: 1.0
+
+    Money:
+      type: integer
+      format: int64
+      example: 10000
+
   parameters:
 
     PageParam:
@@ -197,6 +320,13 @@ components:
         type: integer
         format: int32
         default: 10
+
+    ContractIdParam:
+      in: path
+      name: contractId
+      schema:
+        $ref: '#/components/schemas/UUID'
+      required: true
 
   responses:
 
