@@ -1,0 +1,66 @@
+def getGitHash = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
+
+jib {
+    from {
+        image = 'amazoncorretto:11-alpine-jdk'
+    }
+
+    to {
+        image = "${project.name}"
+        tags = ['latest', "${project.version}".toString(), getGitHash()]
+    }
+
+    // If set to packaged, puts the JAR artifact built by the Gradle Java plugin into the final image.
+    // If set to exploded (default), containerizes individual .class files and resources files.
+    containerizingMode = 'packaged'
+
+    container {
+        jvmFlags = [
+                // Java9 container support @see https://www.eclipse.org/openj9/docs/xxusecontainersupport/
+                '-XX:-UseContainerSupport',
+                '-XX:MaxRAMPercentage=80',
+                '-XX:+HeapDumpOnOutOfMemoryError',
+                '-XX:HeapDumpPath=/tmp',
+                '-Djava.net.preferIPv4Stack=true',
+                '-Duser.timezone=Asia/Seoul',
+                '-Dfile.encoding=UTF8',
+                '-Dsun.net.inetaddr.ttl=30',
+        ]
+        ports = ['8080']
+        creationTime = 'USE_CURRENT_TIMESTAMP'
+    }
+}
+
+task down(type:Exec) {
+    commandLine '/usr/local/bin/docker-compose', '-f', 'docker/docker-compose.yml', 'down'
+}
+
+task up(type:Exec) {
+    dependsOn down
+    commandLine '/usr/local/bin/docker-compose', '-f', 'docker/docker-compose.yml', 'up'
+}
+
+// How to start a cluster including "jhipster-uaa"
+//
+// Build "jhipster-uaa" docker image
+//   ~/jhipster-uaa $ ./gradlew clean jibDockerBuild
+//   ~ $ docker image ls | grep uaa
+//   # uaa  latest  f50dc363f133    xx minutes ago  305MB
+//
+// Run the cluster
+//   ~/immutableentity $ ./gradlew clusterUp
+task clusterDown(type:Exec) {
+    commandLine '/usr/local/bin/docker-compose', '-f', 'docker/cluster-compose.yml', 'down'
+}
+
+task clusterUp(type:Exec) {
+    dependsOn clusterDown
+    commandLine '/usr/local/bin/docker-compose', '-f', 'docker/cluster-compose.yml', 'up'
+}
