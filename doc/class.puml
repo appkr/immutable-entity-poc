@@ -1,0 +1,32 @@
+@startuml
+
+package contract {
+  class Contract {
+    - contractId: Long
+    - status: ContractStatus
+    - validThrough: DateRange
+    - changeLogs: Contract[]
+  }
+}
+
+package pricingplan {
+  class PricingPlan {
+    - pricingPlanId: Long
+    - contractId: Long
+    - plans: Set<DistanceRangePricingElement>
+  }
+
+  class DistanceRangePricingElement <<value>> {
+    - from: Distance 'not inclusive
+    - to: Distance 'inclusive
+    - step: Distance
+    - pricePerStep: Money
+    - roundingMode: RoundingMode
+    - decimalPrecision: Integer
+  }
+}
+
+Contract -> PricingPlan
+PricingPlan o-- DistanceRangePricingElement
+
+@enduml
