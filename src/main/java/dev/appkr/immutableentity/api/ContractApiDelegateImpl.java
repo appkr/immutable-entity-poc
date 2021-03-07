@@ -1,6 +1,7 @@
 package dev.appkr.immutableentity.api;
 
 import dev.appkr.immutableentity.api.model.ContractDto;
+import dev.appkr.immutableentity.api.model.ContractListDto;
 import dev.appkr.immutableentity.service.ContractService;
 import dev.appkr.immutableentity.support.HeaderUtils;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +34,11 @@ public class ContractApiDelegateImpl implements ContractApiDelegate {
   @Override
   public ResponseEntity<ContractDto> getContract(UUID contractId) {
     return ResponseEntity.ok(service.getContract(contractId));
+  }
+
+  @Override
+  public ResponseEntity<ContractListDto> getContractChangeLogs(UUID contractId) {
+    return ResponseEntity.ok(
+        new ContractListDto().data(service.getContractChangeLogs(contractId)));
   }
 }

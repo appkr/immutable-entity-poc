@@ -11,5 +11,5 @@ import java.util.UUID;
 public interface ContractRepository extends JpaRepository<Contract, Long> {
 
   Optional<Contract> findTopByExternalIdOrderByIdDesc(@Param("externalId") UUID externalId);
-  List<Contract> findByExternalId(@Param("externalId") UUID externalId);
+  List<Contract> findAllByExternalIdOrderByIdDesc(@Param("externalId") UUID externalId);
 }

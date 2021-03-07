@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -50,5 +52,15 @@ public class ContractService {
   private void validateContractId(UUID contractId) {
     Contract c = contractRepository.findTopByExternalIdOrderByIdDesc(contractId)
         .orElseThrow(() -> new EntityNotFoundException());
+  }
+
+  public List<ContractDto> getContractChangeLogs(UUID contractId) {
+    // NOTE. This makes N+1 issue
+    return contractRepository.findAllByExternalIdOrderByIdDesc(contractId).stream()
+        .map(c -> {
+          PricingPlan p = pricingPlanRepository.findByContractId(c.getId()).orElse(null);
+          return contractMapper.toDto(c, p);
+        })
+        .collect(Collectors.toList());
   }
 }

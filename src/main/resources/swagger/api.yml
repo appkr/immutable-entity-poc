@@ -82,7 +82,6 @@ paths:
       operationId: getContract
       tags:
         - Contract
-
       responses:
         '200':
           description: Ok
@@ -104,6 +103,23 @@ paths:
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
+
+  /api/contracts/{contractId}/change-logs:
+    parameters:
+      - $ref: '#/components/parameters/ContractIdParam'
+
+    get:
+      description: 계약 변경 이력 조회
+      operationId: getContractChangeLogs
+      tags:
+        - Contract
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/vnd.appkr.private.v1+json:
+              schema:
+                $ref: '#/components/schemas/ContractList'
 
 components:
   schemas:
@@ -226,6 +242,14 @@ components:
             $ref: '#/components/schemas/Example'
         page:
           $ref: '#/components/schemas/Page'
+
+    ContractList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contract'
 
     Contract:
       type: object
