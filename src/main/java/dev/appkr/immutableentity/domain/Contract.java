@@ -13,7 +13,7 @@ import java.util.UUID;
 @Table(name = "contracts")
 @Getter
 @ToString
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"id"}, callSuper = false)
 public class Contract extends AbstractAggregateRoot {
 
   @Id

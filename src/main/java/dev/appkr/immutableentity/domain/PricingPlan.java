@@ -15,7 +15,7 @@ import java.util.UUID;
 @Table(name = "pricing_plans")
 @Getter
 @ToString
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"id"}, callSuper = false)
 public class PricingPlan extends AbstractAggregateRoot {
 
   @Id

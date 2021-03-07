@@ -1,17 +1,22 @@
 package dev.appkr.immutableentity;
 
+import dev.appkr.immutableentity.api.model.*;
 import dev.appkr.immutableentity.domain.*;
 import dev.appkr.immutableentity.support.Carbon;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
 
 import static dev.appkr.immutableentity.domain.DistanceRangePricingElement.DistanceRangePricingElementBuilder;
 import static dev.appkr.immutableentity.domain.PricingPlan.PricingPlanBuilder;
+import static java.util.Arrays.asList;
 
 public class Fixtures {
+
+  // ENTITY
 
   public static Contract.ContractBuilder aContract() {
     return Contract.builder()
@@ -76,7 +81,7 @@ public class Fixtures {
             new DistanceRangePricingElementDto()
               .from(new DistanceDto().value("2.0"))
               .to(new DistanceDto().value("999.0"))
-                .to(new DistanceDto().value("0.1"))
+              .step(new DistanceDto().value("0.1"))
               .pricePerStep(100L)
         )));
   }
