@@ -1,5 +1,12 @@
 # immutableentity
 
+불변 엔티티를 실험하기 위한 프로젝트 입니다 (NO SQL UPDATE, ONLY INSERT).
+
+![](doc/class.svg)
+
+- [포스트맨 콜렉션](https://www.getpostman.com/collections/45a81ff70576c7317bc8)
+- [포스트맨 환경](doc/LOCAL.postman_environment.json)
+
 ## 개발 환경
 - [amazonaws corretto jdk11](https://docs.aws.amazon.com/ko_kr/corretto/latest/corretto-11-ug/what-is-corretto-11.html) 을 사용합니다
 ```bash

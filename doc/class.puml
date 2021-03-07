@@ -13,7 +13,7 @@ package pricingplan {
   class PricingPlan {
     - pricingPlanId: Long
     - contractId: Long
-    - plans: Set<DistanceRangePricingElement>
+    - bin: Set<DistanceRangePricingElement>
   }
 
   class DistanceRangePricingElement <<value>> {
@@ -21,8 +21,6 @@ package pricingplan {
     - to: Distance 'inclusive
     - step: Distance
     - pricePerStep: Money
-    - roundingMode: RoundingMode
-    - decimalPrecision: Integer
   }
 }
 
