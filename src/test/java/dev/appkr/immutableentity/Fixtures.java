@@ -3,14 +3,11 @@ package dev.appkr.immutableentity;
 import dev.appkr.immutableentity.api.model.*;
 import dev.appkr.immutableentity.domain.*;
 import dev.appkr.immutableentity.support.Carbon;
-import org.springframework.data.geo.Distance;
-import org.springframework.data.geo.Metrics;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
 
-import static dev.appkr.immutableentity.domain.DistanceRangePricingElement.DistanceRangePricingElementBuilder;
 import static dev.appkr.immutableentity.domain.PricingPlan.PricingPlanBuilder;
 import static java.util.Arrays.asList;
 
@@ -36,23 +33,18 @@ public class Fixtures {
         .externalId(UUID.randomUUID())
         .contractId(1L)
         .bin(new HashSet<DistanceRangePricingElement>() {{
-          add(aDistanceRangePricingElement().build());
           add(DistanceRangePricingElement.builder()
-            .from(new Distance(2.0, Metrics.KILOMETERS))
-            .to(new Distance(999.0, Metrics.KILOMETERS))
-            .step(new Distance(0.1, Metrics.KILOMETERS))
+              .from(Distance.ZERO)
+              .to(new Distance(1.0, DistanceUnit.KILOMETER))
+              .step(new Distance(1.0, DistanceUnit.KILOMETER))
+              .pricePerStep(Money.won(1000)).build());
+          add(DistanceRangePricingElement.builder()
+            .from(new Distance(1.0, DistanceUnit.KILOMETER))
+            .to(new Distance(999.0, DistanceUnit.KILOMETER))
+            .step(new Distance(0.1, DistanceUnit.KILOMETER))
             .pricePerStep(Money.won(100L))
-            .build()
-          );
+            .build());
         }});
-  }
-
-  public static DistanceRangePricingElementBuilder aDistanceRangePricingElement() {
-    return DistanceRangePricingElement.builder()
-        .from(new Distance(0.0, Metrics.KILOMETERS))
-        .to(new Distance(1.0, Metrics.KILOMETERS))
-        .step(new Distance(1.0, Metrics.KILOMETERS))
-        .pricePerStep(Money.won(1000));
   }
 
   // DTO
@@ -77,20 +69,16 @@ public class Fixtures {
         .pricingPlanId(UUID.randomUUID())
         .contractId(UUID.randomUUID())
         .bin(new ArrayList<DistanceRangePricingElementDto>(asList(
-            aDistanceRangePricingElementDto(),
             new DistanceRangePricingElementDto()
-              .from(new DistanceDto().value("2.0"))
+                .from(new DistanceDto().value("1.0"))
+                .to(new DistanceDto().value("2.0"))
+                .step(new DistanceDto().value("1.0"))
+                .pricePerStep(1000L),
+            new DistanceRangePricingElementDto()
+              .from(new DistanceDto().value("1.0"))
               .to(new DistanceDto().value("999.0"))
               .step(new DistanceDto().value("0.1"))
               .pricePerStep(100L)
         )));
-  }
-
-  public static DistanceRangePricingElementDto aDistanceRangePricingElementDto() {
-    return new DistanceRangePricingElementDto()
-        .from(new DistanceDto().value("1.0"))
-        .to(new DistanceDto().value("2.0"))
-        .step(new DistanceDto().value("1.0"))
-        .pricePerStep(1000L);
   }
 }
