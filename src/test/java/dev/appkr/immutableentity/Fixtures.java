@@ -70,8 +70,8 @@ public class Fixtures {
         .contractId(UUID.randomUUID())
         .bin(new ArrayList<DistanceRangePricingElementDto>(asList(
             new DistanceRangePricingElementDto()
-                .from(new DistanceDto().value("1.0"))
-                .to(new DistanceDto().value("2.0"))
+                .from(new DistanceDto().value("0.0"))
+                .to(new DistanceDto().value("1.0"))
                 .step(new DistanceDto().value("1.0"))
                 .pricePerStep(1000L),
             new DistanceRangePricingElementDto()

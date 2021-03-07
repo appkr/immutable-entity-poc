@@ -1,5 +1,7 @@
 package dev.appkr.immutableentity.domain;
 
+import dev.appkr.immutableentity.api.model.ContractDto;
+import dev.appkr.immutableentity.domain.factory.ContractFactory;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -32,8 +34,8 @@ public class Contract extends AbstractAggregateRoot {
   })
   private DateRange validThrough;
 
-  public static Contract of(ContractStatus status, DateRange validThrough) {
-    return new Contract(UUID.randomUUID(), status, validThrough);
+  public static Contract from(ContractDto dto) {
+    return new ContractFactory().from(dto);
   }
 
   protected Contract() {

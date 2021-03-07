@@ -47,7 +47,7 @@ class ContractApiDelegateImplTest {
   @Test
   public void testCreateContract() throws Exception {
     ContractDto dto = aContractDto();
-    when(mockContractService.createContract(dto)).thenReturn(dto);
+//    when(mockContractService.createContract(dto)).thenReturn(dto);
 
     final ResultActions res = this.mvc.perform(
         post("/api/contracts")
@@ -65,7 +65,7 @@ class ContractApiDelegateImplTest {
     repository.saveAndFlush(entity);
 
     ContractDto dto = aContractDto().status(ContractStatusDto.EFFECTIVE);
-    when(mockContractService.updateContract(entity.getExternalId(), dto)).thenReturn(dto);
+//    when(mockContractService.updateContract(entity.getExternalId(), dto)).thenReturn(dto);
 
     final ResultActions res = this.mvc.perform(
         put("/api/contracts/{contractId}", entity.getExternalId())
@@ -83,7 +83,7 @@ class ContractApiDelegateImplTest {
     repository.saveAndFlush(entity);
 
     ContractDto dto = aContractDto();
-    when(mockContractService.getContract(entity.getExternalId())).thenReturn(dto);
+//    when(mockContractService.getContract(entity.getExternalId())).thenReturn(dto);
 
     final ResultActions res = this.mvc.perform(
         get("/api/contracts/{contractId}", entity.getExternalId())

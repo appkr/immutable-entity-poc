@@ -1,5 +1,7 @@
 package dev.appkr.immutableentity.domain;
 
+import dev.appkr.immutableentity.api.model.ContractDto;
+import dev.appkr.immutableentity.domain.factory.PricingPlanFactory;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,8 +38,8 @@ public class PricingPlan extends AbstractAggregateRoot {
   })
   private Set<DistanceRangePricingElement> bin = new HashSet<>();
 
-  public static PricingPlan of (Long contractId, Set<DistanceRangePricingElement> bin) {
-    return new PricingPlan(UUID.randomUUID(), contractId, bin);
+  public static PricingPlan from (Long contractId, ContractDto dto) {
+    return new PricingPlanFactory().from(contractId, dto);
   }
 
   protected PricingPlan() {
