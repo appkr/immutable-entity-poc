@@ -38,7 +38,7 @@ public class PricingPlan extends AbstractAggregateRoot {
   })
   private Set<DistanceRangePricingElement> bin = new HashSet<>();
 
-  public static PricingPlan from (Long contractId, ContractDto dto) {
+  public static PricingPlan make(Long contractId, ContractDto dto) {
     return new PricingPlanFactory().from(contractId, dto);
   }
 

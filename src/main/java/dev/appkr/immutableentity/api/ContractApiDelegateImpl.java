@@ -17,11 +17,10 @@ public class ContractApiDelegateImpl implements ContractApiDelegate {
   private final ContractService service;
 
   @Override
-  public ResponseEntity<Void> createContract(ContractDto dto) {
+  public ResponseEntity<ContractDto> createContract(ContractDto dto) {
     ContractDto res = service.createContract(dto);
 
-    return ResponseEntity.created(
-        HeaderUtils.uri("/{contractId}", dto.getContractId())).build();
+    return ResponseEntity.created(HeaderUtils.uri("/{contractId}", res.getContractId())).body(res);
   }
 
   @Override

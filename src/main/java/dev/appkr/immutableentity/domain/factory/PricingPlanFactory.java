@@ -15,7 +15,8 @@ public class PricingPlanFactory {
 
   public PricingPlan from(Long contractId, ContractDto dto) {
     return PricingPlan.builder()
-        .externalId(UUID.randomUUID())
+        .externalId((dto.getPricingPlan().getPricingPlanId() != null)
+            ? dto.getPricingPlan().getPricingPlanId() : UUID.randomUUID())
         .contractId(contractId)
         .bin(from(dto.getPricingPlan().getBin()))
         .build();

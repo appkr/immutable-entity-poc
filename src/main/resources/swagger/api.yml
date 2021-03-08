@@ -71,7 +71,11 @@ paths:
               $ref: '#/components/schemas/Contract'
       responses:
         '201':
-          $ref: '#/components/responses/Created'
+          description: Created
+          content:
+            application/vnd.appkr.private.v1+json:
+              schema:
+                $ref: '#/components/schemas/Contract'
 
   /api/contracts/{contractId}:
     parameters:
@@ -93,6 +97,24 @@ paths:
     put:
       description: 계약 변경
       operationId: updateContract
+      tags:
+        - Contract
+      requestBody:
+        content:
+          application/vnd.appkr.private.v1+json:
+            schema:
+              $ref: '#/components/schemas/Contract'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+
+  /api/contracts/{contractId}/status:
+    parameters:
+      - $ref: '#/components/parameters/ContractIdParam'
+
+    patch:
+      description: 계약 상태 변경
+      operationId: changeContractStatus
       tags:
         - Contract
       requestBody:

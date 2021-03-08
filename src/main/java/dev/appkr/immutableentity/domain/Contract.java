@@ -1,8 +1,6 @@
 package dev.appkr.immutableentity.domain;
 
-import static dev.appkr.immutableentity.domain.ContractStatus.DRAFT;
-import static dev.appkr.immutableentity.domain.ContractStatus.EFFECTIVE;
-import static dev.appkr.immutableentity.domain.ContractStatus.TERMINATED;
+import static dev.appkr.immutableentity.domain.ContractStatus.*;
 
 import dev.appkr.immutableentity.api.model.ContractDto;
 import dev.appkr.immutableentity.domain.factory.ContractFactory;
@@ -68,7 +66,7 @@ public class Contract extends AbstractAggregateRoot {
     loadState();
   }
 
-  @PostConstruct
+  @PostLoad
   void loadState() {
     // @Transient field will not be initialized when hydrating object from database query result.
     // @see https://stackoverflow.com/questions/10313535/initializing-a-transient-attribute-of-a-jpa-entity-during-criteriaquery

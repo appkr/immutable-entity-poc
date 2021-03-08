@@ -28,7 +28,7 @@ public class ContractService {
     Contract c = Contract.make(dto);
     contractRepository.save(c);
 
-    final PricingPlan p = PricingPlan.from(c.getId(), dto);
+    final PricingPlan p = PricingPlan.make(c.getId(), dto);
     pricingPlanRepository.save(p);
 
     return contractMapper.toDto(c, p);
@@ -43,6 +43,10 @@ public class ContractService {
 
   public ContractDto updateContract(UUID contractId, ContractDto dto) {
     validateContractId(contractId);
+
+    // mutate contractId
+    dto = dto.contractId(contractId);
+    dto = dto.pricingPlan(dto.getPricingPlan().contractId(contractId));
 
     return createContract(dto);
   }

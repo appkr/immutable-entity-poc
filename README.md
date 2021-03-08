@@ -1,6 +1,27 @@
 # immutableentity
 
-불변 엔티티를 실험하기 위한 프로젝트 입니다 (NO SQL UPDATE, ONLY INSERT).
+불변 엔티티를 실험하기 위한 프로젝트 입니다
+
+핵심 아이디어: **NO SQL UPDATE, ONLY INSERT**
+```java
+// 저장: 업데이트하지 않고 인서트
+// https://github.com/appkr/immutable-entity-poc/blob/master/src/main/java/dev/appkr/immutableentity/service/ContractService.java#L44-L52
+public class ContractService {
+  public ContractDto updateContract(UUID contractId, ContractDto dto) {
+    dto = dto.contractId(contractId); // 받은 contractId를 ContractDto에 셋팅
+    dto = dto.pricingPlan(dto.getPricingPlan().contractId(contractId)); // 받은 contractId를 PricingPlanDto에 셋팅
+    return createContract(dto);
+  }
+}
+```
+
+```java
+// 조회: UUID로 조회하면서 시간 역순 정렬해서 최상위 한 개만 조회
+// https://github.com/appkr/immutable-entity-poc/blob/master/src/main/java/dev/appkr/immutableentity/repository/ContractRepository.java#L13
+public interface ContractRepository extends JpaRepository<Contract, Long> {
+  Optional<Contract> findTopByExternalIdOrderByIdDesc(@Param("externalId") UUID externalId);
+}
+```
 
 ![](doc/class.svg)
 
