@@ -1,5 +1,9 @@
 package dev.appkr.immutableentity.service;
 
+import static dev.appkr.immutableentity.Fixtures.aContractDto;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import dev.appkr.immutableentity.api.model.ContractDto;
 import dev.appkr.immutableentity.api.model.ContractStatusDto;
 import dev.appkr.immutableentity.repository.ContractRepository;
@@ -13,10 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-
-import static dev.appkr.immutableentity.Fixtures.aContractDto;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -57,6 +57,33 @@ class ContractServiceTest {
     assertTrue(contractRepository.findAll().size() > 1);
     assertTrue(pricingPlanRepository.findAll().size() > 1);
     log.info("dto {}", dto);
+  }
+
+  @Test
+  @Transactional
+  void testBeginEffective() {
+    ContractDto dto = sut.createContract(aContractDto());
+
+    sut.beginEffective(dto.getContractId());
+  }
+
+  @Test
+  @Transactional
+  void testTerminate() {
+    ContractDto dto = sut.createContract(aContractDto().status(ContractStatusDto.EFFECTIVE));
+    log.info("dto {}", dto);
+
+    sut.terminate(dto.getContractId());
+  }
+
+  @Test
+  @Transactional
+  void testIllegalStateChange() {
+    ContractDto dto = sut.createContract(aContractDto());
+
+    assertThrows(IllegalStateException.class, () -> {
+      sut.terminate(dto.getContractId());
+    });
   }
 
   @AfterEach

@@ -25,7 +25,7 @@ public class ContractService {
   private final ContractMapper contractMapper;
 
   public ContractDto createContract(ContractDto dto) {
-    Contract c = Contract.from(dto);
+    Contract c = Contract.make(dto);
     contractRepository.save(c);
 
     final PricingPlan p = PricingPlan.from(c.getId(), dto);
@@ -35,10 +35,8 @@ public class ContractService {
   }
 
   public ContractDto getContract(UUID contractId) {
-    Contract c = contractRepository.findTopByExternalIdOrderByIdDesc(contractId)
-        .orElseThrow(() -> new EntityNotFoundException());
-    PricingPlan p = pricingPlanRepository.findByContractId(c.getId())
-        .orElseThrow(() -> new EntityNotFoundException());
+    Contract c = findContractBy(contractId);
+    PricingPlan p = findPricingPlanBy(c.getId());
 
     return contractMapper.toDto(c, p);
   }
@@ -50,17 +48,36 @@ public class ContractService {
   }
 
   private void validateContractId(UUID contractId) {
-    Contract c = contractRepository.findTopByExternalIdOrderByIdDesc(contractId)
-        .orElseThrow(() -> new EntityNotFoundException());
+    findContractBy(contractId);
   }
 
   public List<ContractDto> getContractChangeLogs(UUID contractId) {
     // NOTE. This makes N+1 issue
+    //       So, in production code, we should fetch a collection of contracts and pricingplans
+    //       and map them in application(memory)
     return contractRepository.findAllByExternalIdOrderByIdDesc(contractId).stream()
         .map(c -> {
           PricingPlan p = pricingPlanRepository.findByContractId(c.getId()).orElse(null);
           return contractMapper.toDto(c, p);
         })
         .collect(Collectors.toList());
+  }
+
+  public void beginEffective(UUID contractId) {
+    findContractBy(contractId).beginEffective();
+  }
+
+  public void terminate(UUID contractId) {
+    findContractBy(contractId).terminate();
+  }
+
+  Contract findContractBy(UUID contractId) {
+    return contractRepository.findTopByExternalIdOrderByIdDesc(contractId)
+        .orElseThrow(() -> new EntityNotFoundException());
+  }
+
+  PricingPlan findPricingPlanBy(Long contractId) {
+    return pricingPlanRepository.findByContractId(contractId)
+        .orElseThrow(() -> new EntityNotFoundException());
   }
 }
